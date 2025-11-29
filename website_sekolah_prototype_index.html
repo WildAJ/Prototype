@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Informasi Sekolah - Prototipe</title>
+  <style>
+    :root{--accent:#2563eb;--muted:#6b7280;--card:#ffffff;--bg:#f8fafc}
+    *{box-sizing:border-box;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{margin:0;background:var(--bg);color:#0f172a}
+    .container{max-width:1100px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between}
+    h1{font-size:20px;margin:0}
+    nav a{margin-left:12px;color:var(--accent);text-decoration:none;font-weight:600}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(12,18,46,0.06)}
+    .search{display:flex;gap:8px}
+    input[type="search"]{flex:1;padding:8px 10px;border-radius:8px;border:1px solid #e6edf3}
+    button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .list-item{padding:10px 0;border-bottom:1px dashed #eef2ff}
+    .muted{color:var(--muted);font-size:13px}
+    .small{font-size:13px}
+    .badge{display:inline-block;padding:4px 8px;background:#eef2ff;color:var(--accent);border-radius:999px;font-weight:600}
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}
+      nav{margin-top:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Informasi Sekolah — Prototipe</h1>
+        <div class="muted">Sistem informasi terpusat: Berita • Jadwal • Katalog Buku</div>
+      </div>
+      <nav>
+        <a href="#berita">Berita</a>
+        <a href="#jadwal">Jadwal</a>
+        <a href="#katalog">Katalog</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+    </header>
+
+    <div class="grid">
+      <main>
+        <section id="berita" class="card">
+          <h2>Berita Terbaru</h2>
+          <div id="newsList">
+            <!-- Berita diisi lewat JS -->
+          </div>
+        </section>
+
+        <section id="jadwal" class="card" style="margin-top:14px">
+          <h2>Jadwal Kegiatan</h2>
+          <div id="scheduleList"></div>
+        </section>
+
+        <section id="katalog" class="card" style="margin-top:14px">
+          <h2>Katalog Buku Perpustakaan</h2>
+          <div style="display:flex;gap:8px;margin-bottom:10px" class="search">
+            <input id="bookSearch" type="search" placeholder="Cari judul, pengarang, atau kata kunci..." />
+            <button id="clearSearch">Bersihkan</button>
+          </div>
+          <div id="bookList"></div>
+        </section>
+      </main>
+
+      <aside>
+        <div class="card">
+          <h3>Statistik Singkat</h3>
+          <div class="small">Siswa: <strong>1.230</strong></div>
+          <div class="small">Buku terdaftar: <strong id="totalBooks">—</strong></div>
+          <div style="margin-top:12px"><span class="badge">Prototype</span> • Bisa disambungkan ke Google Sheets</div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3>Petunjuk Cepat (Admin)</h3>
+          <ol class="small">
+            <li>Gunakan data statis di berkas atau sambungkan ke Google Sheets.</li>
+            <li>Untuk publikasi cepat, gunakan GitHub Pages atau Netlify.</li>
+            <li>Buat backup data sebelum update.</li>
+          </ol>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3>Kontak Pengembang</h3>
+          <div class="small" id="kontak">Tim Proyek: Fahri (Ketua)</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      Prototype dibuat untuk presentasi proyek. Untuk gunakan nyata, hubungkan ke database dan autentikasi sederhana.
+    </footer>
+  </div>
+
+  <script>
+    /***** DATA PROTOTIPE (ganti atau sambungkan ke Google Sheets) *****/
+    const NEWS = [
+      {id:1,title:'Pelatihan Literasi Digital untuk Siswa',date:'2025-11-10',summary:'Workshop penggunaan perpustakaan digital dan pencarian sumber belajar.'},
+      {id:2,title:'Pendaftaran Ekstrakurikuler Dibuka',date:'2025-10-20',summary:'Daftar ekstrakurikuler tersedia di sekolah mulai minggu depan.'}
+    ];
+
+    const SCHEDULE = [
+      {id:1,event:'Ujian Tengah Semester',date:'2025-12-08',time:'08:00'},
+      {id:2,event:'Hari Buku Nasional - Pameran',date:'2025-12-01',time:'09:00'}
+    ];
+
+    const BOOKS = [
+      {id:1,title:'Fisika SMA Kelas X',author:'S. Wijaya',year:2019,location:'Rak A/12'},
+      {id:2,title:'Biologi Lengkap',author:'A. Santoso',year:2018,location:'Rak B/03'},
+      {id:3,title:'Kamus Bahasa Inggris',author:'Oxford',year:2015,location:'Rak C/01'}
+    ];
+
+    /***** RENDERING *****/
+    function renderNews(){
+      const el=document.getElementById('newsList');el.innerHTML='';
+      NEWS.forEach(n=>{
+        const d=document.createElement('div');d.className='list-item';
+        d.innerHTML=`<strong>${n.title}</strong><div class="muted small">${n.date}</div><div class="small">${n.summary}</div>`;
+        el.appendChild(d);
+      });
+    }
+    function renderSchedule(){
+      const el=document.getElementById('scheduleList');el.innerHTML='';
+      SCHEDULE.forEach(s=>{
+        const d=document.createElement('div');d.className='list-item';
+        d.innerHTML=`<strong>${s.event}</strong><div class="muted small">${s.date} • ${s.time}</div>`;
+        el.appendChild(d);
+      });
+    }
+    function renderBooks(filter=''){
+      const el=document.getElementById('bookList');el.innerHTML='';
+      const f=filter.trim().toLowerCase();
+      const filtered=BOOKS.filter(b=> (b.title+b.author+ (b.year||'')).toLowerCase().includes(f));
+      if(filtered.length===0){el.innerHTML='<div class="muted">Tidak ditemukan hasil.</div>';}
+      filtered.forEach(b=>{
+        const d=document.createElement('div');d.className='list-item';
+        d.innerHTML=`<strong>${b.title}</strong> <div class="muted small">${b.author} • ${b.year}</div><div class="small">Lokasi: ${b.location}</div>`;
+        el.appendChild(d);
+      });
+      document.getElementById('totalBooks').textContent=BOOKS.length;
+    }
+
+    // search handlers
+    document.getElementById('bookSearch').addEventListener('input',e=>renderBooks(e.target.value));
+    document.getElementById('clearSearch').addEventListener('click',()=>{document.getElementById('bookSearch').value='';renderBooks();});
+
+    // initial render
+    renderNews();renderSchedule();renderBooks();
+
+    /***** CATATAN PENGEMBANGAN *****/
+    /*
+      Cara mengganti data: edit array NEWS, SCHEDULE, BOOKS di bagian atas.
+
+      Cara menyambungkan ke Google Sheets (ringkasan):
+      1. Buat sheet berisi data buku (kolom: id,title,author,year,location).
+      2. File > Publish to web -> pilih sheet -> publish as CSV.
+      3. Gunakan fetch('URL_csv') lalu parse CSV -> ubah menjadi array BOOKS lalu renderBooks().
+
+      Cara deploy cepat:
+      - GitHub Pages: buat repo, tambahkan file index.html, aktifkan Pages -> pilih branch main.
+      - Netlify/Vercel: drag & drop file atau koneksi repo.
+
+      Keamanan & skala:
+      - Untuk penggunaan nyata, buat backend (Firebase / simple PHP + MySQL) dan autentikasi admin.
+      - Backup data secara berkala.
+    */
+  </script>
+</body>
+</html>
